@@ -6,4 +6,4 @@
 - [x] Sedding do banco (armazenar dados no bd)
 - [x] Introdução ao Next.js
 - [x] Tailwind e Shadcn
-- [] Git Hooks
+- [x] Git Hooks

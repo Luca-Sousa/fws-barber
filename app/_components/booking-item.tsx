@@ -1,3 +1,5 @@
+"use client"
+
 import { Badge } from "../_components/ui/badge"
 import { Avatar, AvatarImage } from "../_components/ui/avatar"
 import { Card, CardContent } from "./ui/card"
@@ -6,13 +8,29 @@ import { format, isFuture } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import {
   Sheet,
+  SheetClose,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet"
 import Image from "next/image"
 import PhoneItem from "./phone-item"
+import { Button } from "./ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog"
+import { DeleteBooking } from "../_actions/delete-booking"
+import { toast } from "sonner"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -30,6 +48,16 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     service: { barbershop },
   } = booking
   const isConfirmed = isFuture(booking.date)
+
+  const handleCancelBooking = async () => {
+    try {
+      await DeleteBooking(booking.id)
+      toast.success("Reserva cancelada com sucesso!")
+    } catch (error) {
+      console.error(error)
+      toast.error("Erro ao cancelar a reserva. Tente Novamente!")
+    }
+  }
 
   return (
     <>
@@ -70,7 +98,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           </Card>
         </SheetTrigger>
 
-        <SheetContent className="w-[90%] space-y-6">
+        <SheetContent className="w-[85%] space-y-6">
           <SheetHeader>
             <SheetTitle className="text-left">
               Informações da Reserva
@@ -150,6 +178,48 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               <PhoneItem key={index} phone={phone} />
             ))}
           </div>
+
+          <SheetFooter>
+            <div className="flex items-center gap-3">
+              <SheetClose asChild>
+                <Button variant="secondary" className="w-full">
+                  Voltar
+                </Button>
+              </SheetClose>
+              {isConfirmed && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild className="w-full">
+                    <Button variant="destructive" className="w-full">
+                      Cancelar Reserva
+                    </Button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent className="w-[90%]">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Cancelar Reserva</AlertDialogTitle>
+
+                      <AlertDialogDescription>
+                        Tem certeza que deseja cancelar esse agendamento?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter className="flex flex-row items-center gap-3">
+                      <AlertDialogCancel className="mt-0 w-full rounded-lg">
+                        Voltar
+                      </AlertDialogCancel>
+
+                      <AlertDialogAction
+                        className="w-full rounded-lg"
+                        onClick={handleCancelBooking}
+                      >
+                        Confirmar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
+          </SheetFooter>
         </SheetContent>
       </Sheet>
     </>

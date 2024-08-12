@@ -89,7 +89,7 @@ const SidebarSheet = () => {
       {data?.user && (
         <div className="flex gap-2 py-5">
           <Button
-            className="justify-start gap-2"
+            className="w-full justify-start gap-2"
             variant="ghost"
             onClick={handleLogoutClick}
           >

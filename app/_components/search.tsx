@@ -31,12 +31,15 @@ const Search = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="flex gap-2">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex gap-2 sm:w-full"
+      >
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="w-full">
+            <FormItem className="w-full sm:max-w-lg lg:max-w-full">
               <FormControl>
                 <Input placeholder="Faça sua busca..." {...field} />
               </FormControl>

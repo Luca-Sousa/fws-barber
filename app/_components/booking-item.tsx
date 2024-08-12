@@ -42,7 +42,6 @@ interface BookingItemProps {
   }>
 }
 
-// TODO: Receber agendamento como prop
 const BookingItem = ({ booking }: BookingItemProps) => {
   const {
     service: { barbershop },

@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog"
-import { DeleteBooking } from "../_actions/delete-booking"
+import { deleteBooking } from "../_actions/delete-booking"
 import { toast } from "sonner"
 import BookingSummary from "./booking-summary"
 
@@ -51,7 +51,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
 
   const handleCancelBooking = async () => {
     try {
-      await DeleteBooking(booking.id)
+      await deleteBooking(booking.id)
       toast.success("Reserva cancelada com sucesso!")
     } catch (error) {
       console.error(error)

@@ -31,6 +31,7 @@ import {
 } from "./ui/alert-dialog"
 import { DeleteBooking } from "../_actions/delete-booking"
 import { toast } from "sonner"
+import BookingSummary from "./booking-summary"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -136,40 +137,11 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               {isConfirmed ? "Confirmado" : "Finalizado"}
             </Badge>
 
-            <Card className="rounded-xl">
-              <CardContent className="space-y-3 p-3">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-bold">{booking.service.name}</h2>
-                  <p className="text-sm font-bold">
-                    {Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(Number(booking.service.price))}
-                  </p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Data</h2>
-                  <p className="text-sm font-bold">
-                    {format(booking.date, "d 'de' MMMM", {
-                      locale: ptBR,
-                    })}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Horário</h2>
-                  <p className="text-sm font-bold">
-                    {format(booking.date, "HH:mm", {
-                      locale: ptBR,
-                    })}
-                  </p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm text-gray-400">Barbearia</h2>
-                  <p className="text-sm font-bold">{barbershop.name}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <BookingSummary
+              barbershop={barbershop}
+              service={booking.service}
+              selectedDate={booking.date}
+            />
           </div>
 
           <div className="space-y-3">

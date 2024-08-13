@@ -100,6 +100,15 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     fetch()
   }, [selectedDay, service.id])
 
+  const selectedDate = useMemo(() => {
+    if (!selectedDay || !selectedTime) return
+
+    return set(selectedDay, {
+      hours: Number(selectedTime.split(":")[0]),
+      minutes: Number(selectedTime.split(":")[1]),
+    })
+  }, [selectedDay, selectedTime])
+
   const handleBookingClick = () => {
     if (data?.user) {
       return setBookingSheetIsOpen(true)
@@ -124,18 +133,11 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
   const handleCreateBooking = async () => {
     try {
-      if (!selectedDay || !selectedTime) return
-
-      const hour = Number(selectedTime.split(":")[0])
-      const minute = Number(selectedTime?.split(":")[1])
-      const newDate = set(selectedDay, {
-        minutes: minute,
-        hours: hour,
-      })
+      if (!selectedDate) return
 
       await createBooking({
         serviceId: service.id,
-        date: newDate,
+        date: selectedDate,
       })
 
       handleBookingSheetOpenChange()
@@ -251,13 +253,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     </div>
                   )}
 
-                  {selectedTime && selectedDay && (
+                  {selectedDate && (
                     <div className="p-5">
                       <BookingSummary
-                        selectedDay={selectedDay}
-                        selectedTime={selectedTime}
                         barbershop={barbershop}
                         service={service}
+                        selectedDate={selectedDate}
                       />
                     </div>
                   )}
